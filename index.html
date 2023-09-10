@@ -17,22 +17,21 @@
         
         .centered-text {
             position: absolute;
-            top: 50%;
+            top: 0;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             text-align: center;
         }
 
         .centered-text h1 {
-            font-size: 40px; /* 可根据需要调整字体大小 */
-            color: #fff; /* 字体颜色，可根据需要调整 */
+            font-size: 40px;
+            color: #fff;
             position: absolute;
-            top: 90%; /* 将文本纵向偏上，横向居中 */
+            top: 0; /* 将文本垂直位于顶部 */
             left: 50%;
-            transform: translateX(-50%);
-            text-align: top;
-            writing-mode: horizontal-tb; /* 强制文本水平排列 */
-            white-space: nowrap; /* 禁止文本换行 */
+            transform: translate(-50%, 0);
+            text-align: center;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -42,4 +41,3 @@
     </div>
 </body>
 </html>
-
