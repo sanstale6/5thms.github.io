@@ -33,11 +33,46 @@
             text-align: center;
             white-space: nowrap;
         }
+
+        .centered-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .centered-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .text-left {
+            position: absolute;
+            top: 50%;
+            left: 10%; /* 调整左边文字的位置 */
+            transform: translate(0, -50%);
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .text-right {
+            position: absolute;
+            top: 50%;
+            right: 10%; /* 调整右边文字的位置 */
+            transform: translate(0, -50%);
+            font-size: 20px;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <div class="centered-text">
         <h1>欢迎来到第五中学！</h1>
+    </div>
+    <div class="centered-image">
+        <img src="50739197-8674-4F38-854D-0A9020DB4FF0.jpeg" alt="伟大的主">
+        <div class="text-left">信钟神</div>
+        <div class="text-right">得永生</div>
     </div>
 </body>
 </html>
