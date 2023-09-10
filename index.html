@@ -8,13 +8,13 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('01A1B8C4-73A3-4C7A-A6FF-D15D0E91AD60.jpeg'); /* 请将 'your-image.jpg' 替换为你的图片文件名和路径 */
+            background-image: url('01A1B8C4-73A3-4C7A-A6FF-D15D0E91AD60.jpeg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             font-family: Arial, sans-serif;
         }
-        
+
         .centered-text {
             position: absolute;
             top: 0;
@@ -27,7 +27,7 @@
             font-size: 40px;
             color: #fff;
             position: absolute;
-            top: 0; /* 将文本垂直位于顶部 */
+            top: 0;
             left: 50%;
             transform: translate(-50%, 0);
             text-align: center;
@@ -49,7 +49,7 @@
         .text-left {
             position: absolute;
             top: 50%;
-            left: -20%; /* 调整左边文字的位置 */
+            left: -20%;
             transform: translate(0, -50%);
             font-size: 70px;
             color: #fff;
@@ -58,9 +58,20 @@
         .text-right {
             position: absolute;
             top: 50%;
-            right: -20%; /* 调整右边文字的位置 */
+            right: -20%;
             transform: translate(0, -50%);
             font-size: 70px;
+            color: #fff;
+        }
+
+        /* 添加免责声明样式 */
+        .disclaimer {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 14px;
             color: #fff;
         }
     </style>
@@ -73,6 +84,10 @@
         <img src="53EE21BB-94DB-4D60-A4E1-121B1E10111D.jpeg" alt="伟大的主">
         <div class="text-left">信钟神</div>
         <div class="text-right">得永生</div>
+    </div>
+    <!-- 免责声明 -->
+    <div class="disclaimer">
+        本网站的信息仅供一般参考，不构成专业建议。我们尽力确保信息准确性，但不保证无误。使用本网站信息需自行判断和承担风险。我们不对因使用本网站信息而导致的任何损失或损害负责。
     </div>
 </body>
 </html>
