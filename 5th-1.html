@@ -37,7 +37,6 @@
             justify-content: center;
             font-size: 12px;
             color: white;
-            cursor: pointer;
         }
         #attack-button {
             margin-top: 10px;
@@ -59,35 +58,71 @@
     <script>
         let playerLevel = 1;
         let playerHealth = 100;
+        let enemyCount = 0;
         
         function createEnemy() {
-            const enemy = document.createElement("div");
-            enemy.className = "enemy";
-            enemy.textContent = `敌人\n血量: ${Math.floor(Math.random() * 100) + 50}`;
-            enemy.style.width = `${Math.floor(Math.random() * 50) + 30}px`;
-            enemy.style.height = `${Math.floor(Math.random() * 50) + 30}px`;
-            enemy.style.top = `${Math.floor(Math.random() * 320)}px`;
-            enemy.style.left = `${Math.floor(Math.random() * 320)}px`;
-            
-            enemy.addEventListener("click", () => {
-                const enemyHealth = parseInt(enemy.textContent.match(/\d+/)[0]);
-                const damage = Math.floor(Math.random() * 10 * playerLevel) + 10;
-                enemyHealth -= damage;
-                if (enemyHealth <= 0) {
-                    enemy.remove();
-                    playerLevel++;
-                    playerHealth += 10;
-                    document.getElementById("player-health").textContent = playerHealth;
-                } else {
-                    enemy.textContent = `敌人\n血量: ${enemyHealth}`;
-                }
-            });
-            
-            document.getElementById("game-container").appendChild(enemy);
+            if (enemyCount < 3) {
+                const enemy = document.createElement("div");
+                enemy.className = "enemy";
+                const enemyHealth = Math.floor(Math.random() * 100) + 50;
+                enemy.textContent = `敌人\n血量: ${enemyHealth}`;
+                enemy.style.width = `${enemyHealth / 2}px`;
+                enemy.style.height = `${enemyHealth / 2}px`;
+                enemy.style.top = `${Math.floor(Math.random() * 320)}px`;
+                enemy.style.left = `${Math.floor(Math.random() * 320)}px`;
+                
+                enemyCount++;
+                
+                enemy.addEventListener("click", () => {
+                    const damage = Math.floor(Math.random() * 10 * playerLevel) + 10;
+                    enemyHealth -= damage;
+                    if (enemyHealth <= 0) {
+                        enemy.remove();
+                        playerLevel++;
+                        playerHealth += 10;
+                        document.getElementById("player-health").textContent = playerHealth;
+                        enemyCount--;
+                    } else {
+                        enemy.textContent = `敌人\n血量: ${enemyHealth}`;
+                    }
+                });
+                
+                document.getElementById("game-container").appendChild(enemy);
+            }
         }
         
         document.getElementById("attack-button").addEventListener("click", () => {
             createEnemy();
+        });
+        
+        document.addEventListener("keydown", (event) => {
+            const player = document.getElementById("player");
+            const playerX = parseInt(player.style.left) || 0;
+            const playerY = parseInt(player.style.top) || 0;
+            const step = 10;
+            
+            switch (event.key) {
+                case "ArrowUp":
+                    if (playerY > 0) {
+                        player.style.top = `${playerY - step}px`;
+                    }
+                    break;
+                case "ArrowDown":
+                    if (playerY < 370) {
+                        player.style.top = `${playerY + step}px`;
+                    }
+                    break;
+                case "ArrowLeft":
+                    if (playerX > 0) {
+                        player.style.left = `${playerX - step}px`;
+                    }
+                    break;
+                case "ArrowRight":
+                    if (playerX < 370) {
+                        player.style.left = `${playerX + step}px`;
+                    }
+                    break;
+            }
         });
     </script>
 </body>
