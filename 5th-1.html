@@ -1,128 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>打怪升级游戏</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #game-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            border: 1px solid #000;
-        }
-        .player {
-            width: 20px;
-            height: 20px;
-            background-color: blue;
-            position: absolute;
-        }
-        .enemy {
-            position: absolute;
-        }
-        .attack-button {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            cursor: pointer;
-        }
-    </style>
+  <title>打怪升级游戏</title>
+  <style>
+    /* 游戏地图样式 */
+    #game-map {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      border: 1px solid black;
+    }
+    
+    /* 主角样式 */
+    #player {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: blue;
+    }
+    
+    /* 敌人样式 */
+    .enemy {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+    }
+    
+    /* 可攻击敌人样式 */
+    .attackable-enemy {
+      background-color: gold;
+    }
+    
+    /* 血量显示样式 */
+    .health {
+      position: absolute;
+      font-size: 10px;
+      color: black;
+    }
+    
+    /* 移动按钮样式 */
+    .move-button {
+      margin-right: 5px;
+    }
+
+    /* 攻击按钮样式 */
+    #attack-button {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div id="game-container">
-        <div class="player" id="player"></div>
+  <div id="game-map">
+    <div id="player"></div>
+    <div id="button-container">
+      <button class="move-button" data-direction="up">上</button>
+      <button class="move-button" data-direction="down">下</button>
+      <button class="move-button" data-direction="left">左</button>
+      <button class="move-button" data-direction="right">右</button>
     </div>
-    <p>主角血量: <span id="player-health">100/100</span></p>
-    <p>敌人血量: <span id="enemy-health">100/100</span></p>
-    <button class="attack-button" id="attack-button">攻击</button>
+  </div>
+  <button id="attack-button">攻击</button>
 
-    <script>
-        const player = document.getElementById('player');
-        const playerHealth = document.getElementById('player-health');
-        const enemyHealth = document.getElementById('enemy-health');
-        const attackButton = document.getElementById('attack-button');
-
-        let playerLevel = 1;
-        let playerMaxHealth = 100;
-        let playerCurrentHealth = playerMaxHealth;
-        let enemyMaxHealth = 0;
-        let enemyCurrentHealth = 0;
-
-        function updateHealthDisplay() {
-            playerHealth.textContent = `${playerCurrentHealth}/${playerMaxHealth}`;
-            enemyHealth.textContent = `${enemyCurrentHealth}/${enemyMaxHealth}`;
-        }
-
-        function createRandomEnemy() {
-            const enemy = document.createElement('div');
-            enemy.className = 'enemy';
-            enemy.style.width = `${Math.floor(Math.random() * 50) + 50}px`; // 随机宽度
-            enemy.style.height = `${Math.floor(Math.random() * 50) + 50}px`; // 随机高度
-            enemy.style.backgroundColor = 'red';
-            enemy.style.position = 'absolute';
-            enemy.style.left = `${Math.random() * 360}px`;
-            enemy.style.top = `${Math.random() * 360}px`;
-            enemyCurrentHealth = Math.floor(Math.random() * 100) + 1; // 随机血量
-            enemyMaxHealth = enemyCurrentHealth;
-            enemy.textContent = `${enemyCurrentHealth}/${enemyMaxHealth}`;
-            document.getElementById('game-container').appendChild(enemy);
-        }
-
-        function updateEnemies() {
-            const enemies = document.querySelectorAll('.enemy');
-            enemies.forEach((enemy) => {
-                const distance = Math.sqrt(
-                    (player.offsetLeft - enemy.offsetLeft) ** 2 + 
-                    (player.offsetTop - enemy.offsetTop) ** 2
-                );
-                if (distance <= enemyMaxHealth) {
-                    enemy.style.color = 'gold';
-                } else {
-                    enemy.style.color = 'black';
-                }
-            });
-        }
-
-        attackButton.addEventListener('click', () => {
-            const enemies = document.querySelectorAll('.enemy');
-            let nearestEnemy = null;
-            let nearestDistance = Infinity;
-
-            enemies.forEach((enemy) => {
-                const distance = Math.sqrt(
-                    (player.offsetLeft - enemy.offsetLeft) ** 2 + 
-                    (player.offsetTop - enemy.offsetTop) ** 2
-                );
-
-                if (distance <= enemyMaxHealth && distance < nearestDistance) {
-                    nearestEnemy = enemy;
-                    nearestDistance = distance;
-                }
-            });
-
-            if (nearestEnemy) {
-                const damage = Math.floor(Math.random() * playerLevel * 10) + 10;
-                enemyCurrentHealth -= damage;
-                if (enemyCurrentHealth < 0) {
-                    enemyCurrentHealth = 0;
-                }
-                nearestEnemy.textContent = `${enemyCurrentHealth}/${enemyMaxHealth}`;
-                updateHealthDisplay();
-                updateEnemies();
-            }
-        });
-
-        // Initialize the game
-        updateHealthDisplay();
-        createRandomEnemy();
-        updateEnemies();
-    </script>
+  <script src="game.js"></script>
 </body>
 </html>
