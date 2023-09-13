@@ -1,72 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>打怪游戏</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打怪升级游戏</title>
     <style>
-        #game-board {
-            width: 100%;
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            position: relative;
+            width: 400px;
             height: 400px;
-            background-color: #EEE;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 20px auto;
+            border: 1px solid #000;
         }
-
-        #player {
-            width: 50px;
-            height: 50px;
+        .character {
+            position: absolute;
             background-color: blue;
-            position: absolute;
-            bottom: 10px;
-            transition: transform 0.3s ease-in-out;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
         }
-
-        .monster {
-            width: 50px;
-            height: 50px;
+        .enemy {
+            position: absolute;
             background-color: red;
-            position: absolute;
-            animation: monster-move 3s infinite alternate;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            cursor: pointer;
         }
-
-        @keyframes monster-move {
-            from {
-                left: 0;
-            }
-
-            to {
-                left: calc(100% - 50px);
-            }
+        #attack-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>打怪游戏</h1>
-    <div id="game-board">
-        <div id="player"></div>
-        <div class="monster"></div>
+    <h1>打怪升级游戏</h1>
+    <div id="game-container">
+        <div id="player" class="character">玩家<br>血量: <span id="player-health">100</span></div>
     </div>
-
+    <button id="attack-button">攻击</button>
+    
     <script>
-        // 获取游戏元素
-        var gameBoard = document.getElementById('game-board');
-        var player = document.getElementById('player');
-        var monsters = document.getElementsByClassName('monster');
-
-        // 移动玩家
-        gameBoard.addEventListener('mousemove', function (event) {
-            var mouseX = event.clientX;
-            var boardX = gameBoard.getBoundingClientRect().left;
-            var playerX = mouseX - boardX - 25; // 50px的宽度的一半
-            player.style.transform = `translateX(${playerX}px)`;
-        });
-
-        // 击败怪物
-        gameBoard.addEventListener('click', function (event) {
-            var target = event.target;
-            if (target.classList.contains('monster')) {
-                target.remove();
-            }
+        let playerLevel = 1;
+        let playerHealth = 100;
+        
+        function createEnemy() {
+            const enemy = document.createElement("div");
+            enemy.className = "enemy";
+            enemy.textContent = `敌人\n血量: ${Math.floor(Math.random() * 100) + 50}`;
+            enemy.style.width = `${Math.floor(Math.random() * 50) + 30}px`;
+            enemy.style.height = `${Math.floor(Math.random() * 50) + 30}px`;
+            enemy.style.top = `${Math.floor(Math.random() * 320)}px`;
+            enemy.style.left = `${Math.floor(Math.random() * 320)}px`;
+            
+            enemy.addEventListener("click", () => {
+                const enemyHealth = parseInt(enemy.textContent.match(/\d+/)[0]);
+                const damage = Math.floor(Math.random() * 10 * playerLevel) + 10;
+                enemyHealth -= damage;
+                if (enemyHealth <= 0) {
+                    enemy.remove();
+                    playerLevel++;
+                    playerHealth += 10;
+                    document.getElementById("player-health").textContent = playerHealth;
+                } else {
+                    enemy.textContent = `敌人\n血量: ${enemyHealth}`;
+                }
+            });
+            
+            document.getElementById("game-container").appendChild(enemy);
+        }
+        
+        document.getElementById("attack-button").addEventListener("click", () => {
+            createEnemy();
         });
     </script>
 </body>
