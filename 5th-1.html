@@ -1,70 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>打怪升级游戏</title>
+    <title>打怪游戏</title>
     <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
+        #game-board {
+            width: 100%;
+            height: 400px;
+            background-color: #EEE;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        #monster {
-            width: 100px;
-            height: 100px;
-            background-color: red;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+
         #player {
             width: 50px;
             height: 50px;
             background-color: blue;
             position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 10px;
+            transition: transform 0.3s ease-in-out;
         }
-        #level {
-            font-size: 24px;
-            margin-top: 20px;
+
+        .monster {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+            animation: monster-move 3s infinite alternate;
+        }
+
+        @keyframes monster-move {
+            from {
+                left: 0;
+            }
+
+            to {
+                left: calc(100% - 50px);
+            }
         }
     </style>
 </head>
 <body>
-    <h1>打怪升级游戏</h1>
-    <div id="monster"></div>
-    <div id="player"></div>
-    <div id="level">等级: 1</div>
-    <button onclick="attackMonster()">攻击怪物</button>
+    <h1>打怪游戏</h1>
+    <div id="game-board">
+        <div id="player"></div>
+        <div class="monster"></div>
+    </div>
 
     <script>
-        let playerLevel = 1;
-        let playerDamage = 10;
-        let monsterHealth = 45;
+        // 获取游戏元素
+        var gameBoard = document.getElementById('game-board');
+        var player = document.getElementById('player');
+        var monsters = document.getElementsByClassName('monster');
 
-        function attackMonster() {
-            monsterHealth -= playerDamage;
-            if (monsterHealth <= 0) {
-                playerLevel++;
-                playerDamage += 5;
-                monsterHealth = 100;
-                document.getElementById('level').textContent = `等级: ${playerLevel}`;
+        // 移动玩家
+        gameBoard.addEventListener('mousemove', function (event) {
+            var mouseX = event.clientX;
+            var boardX = gameBoard.getBoundingClientRect().left;
+            var playerX = mouseX - boardX - 25; // 50px的宽度的一半
+            player.style.transform = `translateX(${playerX}px)`;
+        });
+
+        // 击败怪物
+        gameBoard.addEventListener('click', function (event) {
+            var target = event.target;
+            if (target.classList.contains('monster')) {
+                target.remove();
             }
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('monster').style.width = `${monsterHealth}%`;
-            if (monsterHealth <= 0) {
-                document.getElementById('monster').style.display = 'none';
-            }
-        }
-
-        updateUI(); // 初始化UI
-
+        });
     </script>
 </body>
 </html>
