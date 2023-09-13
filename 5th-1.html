@@ -6,137 +6,123 @@
     <title>打怪升级游戏</title>
     <style>
         body {
-            text-align: center;
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
         #game-container {
             position: relative;
             width: 400px;
             height: 400px;
-            margin: 20px auto;
             border: 1px solid #000;
         }
-        .character {
-            position: absolute;
+        .player {
+            width: 20px;
+            height: 20px;
             background-color: blue;
-            width: 30px;
-            height: 30px;
-            border: 1px solid #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: white;
+            position: absolute;
         }
         .enemy {
             position: absolute;
-            background-color: red;
-            border: 1px solid #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: white;
         }
-        #attack-button {
+        .attack-button {
+            display: block;
             margin-top: 10px;
-            padding: 10px 20px;
-            background-color: green;
-            color: white;
-            border: none;
+            text-align: center;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>打怪升级游戏</h1>
     <div id="game-container">
-        <div id="player" class="character">玩家<br>等级: <span id="player-level">1</span><br>血量: <span id="player-health">100</span></div>
+        <div class="player" id="player"></div>
     </div>
-    <button id="attack-button">攻击</button>
-    
+    <p>主角血量: <span id="player-health">100/100</span></p>
+    <p>敌人血量: <span id="enemy-health">100/100</span></p>
+    <button class="attack-button" id="attack-button">攻击</button>
+
     <script>
+        const player = document.getElementById('player');
+        const playerHealth = document.getElementById('player-health');
+        const enemyHealth = document.getElementById('enemy-health');
+        const attackButton = document.getElementById('attack-button');
+
         let playerLevel = 1;
-        let playerHealth = 100;
-        
-        function createEnemy() {
-            const enemy = document.createElement("div");
-            enemy.className = "enemy";
-            const enemyHealth = Math.floor(Math.random() * 100) + 50;
-            enemy.textContent = `敌人\n等级: ${Math.floor(enemyHealth / 10)}\n血量: ${enemyHealth}`;
-            enemy.style.width = `${enemyHealth / 2}px`;
-            enemy.style.height = `${enemyHealth / 2}px`;
-            enemy.style.top = `${Math.floor(Math.random() * 320)}px`;
-            enemy.style.left = `${Math.floor(Math.random() * 320)}px`;
-            
-            enemy.addEventListener("click", () => {
-                const enemyHealth = parseInt(enemy.textContent.match(/\d+/g)[1]);
-                const damage = Math.floor(Math.random() * 10 * playerLevel) + 10;
-                enemyHealth -= damage;
-                if (enemyHealth <= 0) {
-                    enemy.remove();
-                    playerLevel++;
-                    playerHealth += 10;
-                    document.getElementById("player-level").textContent = playerLevel;
-                    document.getElementById("player-health").textContent = playerHealth;
+        let playerMaxHealth = 100;
+        let playerCurrentHealth = playerMaxHealth;
+        let enemyMaxHealth = 0;
+        let enemyCurrentHealth = 0;
+
+        function updateHealthDisplay() {
+            playerHealth.textContent = `${playerCurrentHealth}/${playerMaxHealth}`;
+            enemyHealth.textContent = `${enemyCurrentHealth}/${enemyMaxHealth}`;
+        }
+
+        function createRandomEnemy() {
+            const enemy = document.createElement('div');
+            enemy.className = 'enemy';
+            enemy.style.width = `${Math.floor(Math.random() * 50) + 50}px`; // 随机宽度
+            enemy.style.height = `${Math.floor(Math.random() * 50) + 50}px`; // 随机高度
+            enemy.style.backgroundColor = 'red';
+            enemy.style.position = 'absolute';
+            enemy.style.left = `${Math.random() * 360}px`;
+            enemy.style.top = `${Math.random() * 360}px`;
+            enemyCurrentHealth = Math.floor(Math.random() * 100) + 1; // 随机血量
+            enemyMaxHealth = enemyCurrentHealth;
+            enemy.textContent = `${enemyCurrentHealth}/${enemyMaxHealth}`;
+            document.getElementById('game-container').appendChild(enemy);
+        }
+
+        function updateEnemies() {
+            const enemies = document.querySelectorAll('.enemy');
+            enemies.forEach((enemy) => {
+                const distance = Math.sqrt(
+                    (player.offsetLeft - enemy.offsetLeft) ** 2 + 
+                    (player.offsetTop - enemy.offsetTop) ** 2
+                );
+                if (distance <= enemyMaxHealth) {
+                    enemy.style.color = 'gold';
                 } else {
-                    enemy.textContent = `敌人\n等级: ${Math.floor(enemyHealth / 10)}\n血量: ${enemyHealth}`;
+                    enemy.style.color = 'black';
                 }
             });
-            
-            document.getElementById("game-container").appendChild(enemy);
         }
-        
-        setInterval(createEnemy, 3000); // 每3秒生成一个敌人
-        
-        document.getElementById("attack-button").addEventListener("click", () => {
-            const enemies = document.querySelectorAll(".enemy");
-            if (enemies.length > 0) {
-                const enemy = enemies[Math.floor(Math.random() * enemies.length)];
-                const enemyHealth = parseInt(enemy.textContent.match(/\d+/g)[1]);
-                const damage = Math.floor(Math.random() * 10 * playerLevel) + 10;
-                enemyHealth -= damage;
-                if (enemyHealth <= 0) {
-                    enemy.remove();
-                    playerLevel++;
-                    playerHealth += 10;
-                    document.getElementById("player-level").textContent = playerLevel;
-                    document.getElementById("player-health").textContent = playerHealth;
-                } else {
-                    enemy.textContent = `敌人\n等级: ${Math.floor(enemyHealth / 10)}\n血量: ${enemyHealth}`;
+
+        attackButton.addEventListener('click', () => {
+            const enemies = document.querySelectorAll('.enemy');
+            let nearestEnemy = null;
+            let nearestDistance = Infinity;
+
+            enemies.forEach((enemy) => {
+                const distance = Math.sqrt(
+                    (player.offsetLeft - enemy.offsetLeft) ** 2 + 
+                    (player.offsetTop - enemy.offsetTop) ** 2
+                );
+
+                if (distance <= enemyMaxHealth && distance < nearestDistance) {
+                    nearestEnemy = enemy;
+                    nearestDistance = distance;
                 }
+            });
+
+            if (nearestEnemy) {
+                const damage = Math.floor(Math.random() * playerLevel * 10) + 10;
+                enemyCurrentHealth -= damage;
+                if (enemyCurrentHealth < 0) {
+                    enemyCurrentHealth = 0;
+                }
+                nearestEnemy.textContent = `${enemyCurrentHealth}/${enemyMaxHealth}`;
+                updateHealthDisplay();
+                updateEnemies();
             }
         });
-        
-        document.addEventListener("keydown", (event) => {
-            const player = document.getElementById("player");
-            const playerX = parseInt(player.style.left) || 0;
-            const playerY = parseInt(player.style.top) || 0;
-            const step = 10;
-            
-            switch (event.key) {
-                case "ArrowUp":
-                    if (playerY > 0) {
-                        player.style.top = `${playerY - step}px`;
-                    }
-                    break;
-                case "ArrowDown":
-                    if (playerY < 370) {
-                        player.style.top = `${playerY + step}px`;
-                    }
-                    break;
-                case "ArrowLeft":
-                    if (playerX > 0) {
-                        player.style.left = `${playerX - step}px`;
-                    }
-                    break;
-                case "ArrowRight":
-                    if (playerX < 370) {
-                        player.style.left = `${playerX + step}px`;
-                    }
-                    break;
-            }
-        });
+
+        // Initialize the game
+        updateHealthDisplay();
+        createRandomEnemy();
+        updateEnemies();
     </script>
 </body>
 </html>
