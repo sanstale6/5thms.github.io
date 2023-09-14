@@ -1,56 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>打怪升级游戏</title>
-  <style>
-    /* 游戏地图样式 */
-    #game-map {
-      position: relative;
-      width: 600px;
-      height: 400px;
-      border: 1px solid black;
-    }
-    
-    /* 主角样式 */
-    #player {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: blue;
-    }
-    
-    /* 敌人样式 */
-    .enemy {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: red;
-    }
-    
-    /* 可攻击敌人样式 */
-    .attackable-enemy {
-      background-color: gold;
-    }
-    
-    /* 血量显示样式 */
-    .health {
-      position: absolute;
-      font-size: 10px;
-      color: black;
-    }
-    
-    /* 攻击按钮样式 */
-    #attack-button {
-      margin-top: 10px;
-    }
-  </style>
+    <title>政教处冒险游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #game-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 150px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div id="game-map">
-    <div id="player"></div>
-  </div>
-  <button id="attack-button">攻击</button>
+    <div id="game-container">
+        <h1>政教处冒险游戏</h1>
+        <div id="output">
+            加入政教处的第一年第一月...
+        </div>
+        <div id="options">
+            <button onclick="chooseOption(1)">听从老钟的指令</button>
+            <button onclick="chooseOption(2)">抓捕违纪学生</button>
+            <button onclick="chooseOption(3)">私奔违纪女生</button>
+        </div>
+    </div>
 
-  <script src="game.js"></script>
+    <script>
+        let month = 1;
+        let year = 1;
+        let currentValue = 0;
+        let endingText = "";
+
+        function chooseOption(option) {
+            // 更新当前数值
+            currentValue += option;
+
+            // 更新游戏状态
+            month++;
+            if (month > 12) {
+                month = 1;
+                year++;
+            }
+
+            // 触发事件
+            let eventText = getEventText();
+            document.getElementById('output').innerHTML = eventText;
+            
+            // 游戏结束判定
+            if (year === 3 && month === 12) {
+                handleGameEnd();
+            }
+        }
+
+        function getEventText() {
+            let eventText = "";
+            switch (month) {
+                case 1:
+                    eventText = "政教处新年度开始，老钟分配任务。";
+                    break;
+                case 6:
+                    eventText = "发现一名违纪学生，应该抓捕吗？";
+                    break;
+                case 9:
+                    eventText = "你与一名违纪女生相爱，决定私奔。";
+                    break;
+                case 12:
+                    eventText = "政教处工作结束，你的命运将在下一个月揭晓。";
+                    break;
+                default:
+                    eventText = `加入政教处的第${year}年第${month}月...`;
+            }
+            return eventText;
+        }
+
+        function handleGameEnd() {
+            if (currentValue < 5) {
+                endingText = "你只是一个普通政教处成员，工作结束后继续平凡的生活。";
+            } else if (currentValue >= 5 && currentValue < 10) {
+                endingText = "你发现了学校的一些不寻常之处，但选择了保持沉默。";
+            } else {
+                endingText = "你的选择导致了一系列恶劣事件，你成为了学校的杀人魔。";
+            }
+            document.getElementById('output').innerHTML = endingText;
+            document.getElementById('options').innerHTML = ''; // 清空选项
+        }
+    </script>
 </body>
 </html>
