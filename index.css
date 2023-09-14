@@ -1,0 +1,170 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+ul,
+ol {
+  list-style: none;
+}
+.hint {
+  width: 100%;
+  margin: 0;
+  padding: 4px 0px;
+  background: #f9f9f9;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  font-size: 14px;
+  color: #ccc;
+}
+.mainView {
+  width: 400px;
+  height: 600px;
+  background: #fff;
+  box-shadow: 0px 0px 8px #ddd;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+.wordListShell {
+  flex-grow: 1;
+  display: flex;
+  margin: 10px;
+  margin-top: 0;
+  border-radius: 8px;
+  background: #33338533;
+  box-shadow: inset 0px 0px 9px #33338533;
+  overflow: auto;
+  padding-right: 4px;
+  flex-direction: column;
+}
+.wordList {
+  border-radius: 8px;
+  overflow: auto;
+}
+.wordList::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent;
+}
+.wordList::-webkit-scrollbar-thumb {
+  background-color: #33338533;
+  border-radius: 14px;
+  width: 6px;
+}
+.wordList::-webkit-scrollbar-thumb:hover {
+  background-color: #33338599;
+}
+.wordList .word {
+  list-style: none;
+  background: #fff;
+  border-radius: 4px;
+  margin: 10px;
+  padding: 6px;
+  margin-right: 6px;
+}
+.typeList {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px 10px;
+  margin-top: -4px;
+}
+.typeList li {
+  color: #fff;
+  list-style: none;
+  border-radius: 3px;
+  margin-right: 6px;
+  padding: 4px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  max-width: 80px;
+  text-align: center;
+  flex-grow: 1;
+}
+.typeList li.good {
+  background: green;
+}
+.typeList li.bad {
+  background: red;
+}
+.typeList li.neutral {
+  background-color: chocolate;
+}
+.attrList {
+  display: flex;
+  padding: 5px;
+}
+.attrList .attrLi {
+  color: #fff;
+  background: #335599;
+  border-radius: 4px;
+  margin: 6px;
+  padding: 3px 6px;
+}
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.choice {
+  border-radius: 8px;
+  background: #666699;
+  margin: 10px;
+  padding: 10px;
+  margin-top: 0;
+  box-shadow: inset 0px 0px 9px #33338533;
+  color: #fff;
+}
+.choice h3,
+.choice h6 {
+  text-align: center;
+  user-select: none;
+}
+.choice h3 {
+  color: #fff;
+  animation: 0.6s breathe infinite alternate;
+}
+.choice h6 {
+  opacity: 0.15;
+  color: #fff;
+  margin: 6px 0;
+  font-weight: none;
+}
+.choice ol button {
+  margin: 6px 0px;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  display: block;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #fff;
+}
+.choice ol button:hover {
+  color: red;
+}
+.choice ol button:hover::after {
+  content: '?';
+}
+@keyframes breathe {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+#推进 {
+  padding: 10px 16px;
+}

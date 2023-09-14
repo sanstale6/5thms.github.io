@@ -1,99 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>政教处冒险游戏</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #game-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        #output {
-            border: 1px solid #ccc;
-            padding: 10px;
-            min-height: 150px;
-        }
-        button {
-            margin: 5px;
-            padding: 10px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>词条模拟器</title>
+    <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1>政教处冒险游戏</h1>
-        <div id="output">
-            加入政教处的第一年第一月...
+    <div class="container">
+        <div class="mainView">
+            <ul class="attrList">
+                <li class="attrLi attr_health">
+                    体质:0
+                </li>
+                <li class="attrLi">
+                    现金:0
+                </li>
+            </ul>
+            <ul class="typeList"></ul>
+            <div class="wordListShell">
+                <ul class="wordList"></ul>
+            </div>
+            <!-- <div class="choice">
+                <h3><<  面对妻子的离婚  >></h3>
+                <h6>---------------抉择时刻---------------</h6>
+                <ol>
+                    <button>痛哭挽留</button>
+                    <button>淡然接受</button>
+                </ol>
+            </div> -->
         </div>
-        <div id="options">
-            <button onclick="chooseOption(1)">听从老钟的指令</button>
-            <button onclick="chooseOption(2)">抓捕违纪学生</button>
-            <button onclick="chooseOption(3)">杀死学生</button>
-        </div>
+        <button id="推进" autofocus>推进!</button>
+        <button id="重开">重开!</button>
+        <audio src="./assets/audio/提示抉择.mp3"></audio>
+        <p class="hint">鸣谢帮助:阿布(鱼翅) 罗觉觉</p>
     </div>
-
-    <script>
-        let month = 1;
-        let year = 1;
-        let currentValue = 0;
-        let endingText = "";
-
-        function chooseOption(option) {
-            // 更新当前数值
-            currentValue += option;
-
-            // 更新游戏状态
-            month++;
-            if (month > 12) {
-                month = 1;
-                year++;
-            }
-
-            // 触发事件
-            let eventText = getEventText();
-            document.getElementById('output').innerHTML = eventText;
-            
-            // 游戏结束判定
-            if (year === 3 && month === 12) {
-                handleGameEnd();
-            }
-        }
-
-        function getEventText() {
-            let eventText = "";
-            switch (month) {
-                case 1:
-                    eventText = "政教处新年度开始，老钟分配任务。";
-                    break;
-                case 6:
-                    eventText = "发现一名违纪学生，应该抓捕吗？";
-                    break;
-                case 9:
-                    eventText = "你与一名违纪女生相爱，决定私奔。";
-                    break;
-                case 12:
-                    eventText = "政教处工作结束，你的命运将在下一个月揭晓。";
-                    break;
-                default:
-                    eventText = `加入政教处的第${year}年第${month}月...`;
-            }
-            return eventText;
-        }
-
-        function handleGameEnd() {
-            if (currentValue < 5) {
-                endingText = "你只是一个普通政教处成员，工作结束后继续平凡的生活。";
-            } else if (currentValue >= 5 && currentValue < 10) {
-                endingText = "你发现了学校的一些不寻常之处，但选择了保持沉默。";
-            } else {
-                endingText = "你的选择导致了一系列恶劣事件，你成为了学校的杀人魔。";
-            }
-            document.getElementById('output').innerHTML = endingText;
-            document.getElementById('options').innerHTML = ''; // 清空选项
-        }
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+    <script src="./模拟器/tools.js"></script>
+    <script src="./模拟器/模板/事件库模板.js"></script>
+    <script src="./模拟器/属性中心.js"></script>
+    <script src="./模拟器/事件中心.js"></script>
+    <script src="./模拟器/界面中心.js"></script>
+    <script src="./模拟器/词库中心.js"></script>
+    <script src="./模拟器/状态中心.js"></script>
+    <script src="./模拟器/触发中心.js"></script>
+    <script src="./模拟器/抉择中心.js"></script>
+    <script src="./模拟器/音效中心.js"></script>
+    <script type="module">
+        事件中心.初始化();
+        界面.初始化();
+        状态中心.初始化(document.querySelector('.typeList'));
+        import 人生重开日常DLC from './人生重开日常/入口文件.js'
+        人生重开日常DLC.初始化();
     </script>
 </body>
 </html>
